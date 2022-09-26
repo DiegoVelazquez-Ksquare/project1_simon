@@ -26,6 +26,10 @@ let hardMode = 0;
 
 let gameTruth = false;
 let nGame = true;
+let reStart = true;
+
+//to change the level for winning
+let win = 20;
 
 
 const vibration = [
@@ -107,6 +111,7 @@ const resetPlayerRound = () => {
 // Function to generate next sequence and show animation
 const nextRound = (options = { withNewColor: true }) => {
   // reset variables related to the player
+  reStart = true;
   // it must be used every time the user fails
   resetPlayerRound();
   // Get game sequence
@@ -151,9 +156,11 @@ const newGame = () => {
    //reStart the match
     resetPlayerRound();
     levelPattern([]);
-    btnReStart.removeAttribute("able");
     btnStart.removeAttribute("disabled");
+    btnReStart.setAttribute("disabled", true);
+
     nGame=false;
+    reStart = true;
 }
 // Variable to know if the sequence was repeated correctly
 let sequenceOK = false;
@@ -194,11 +201,10 @@ const playerRound = () => {
         if (sequenceOK) {
           disabledButtons();
           //Condition to win the game
-          if(gameSequence.length <20){
+          if(gameSequence.length <win){
           // Call to nextRound function (generate the next sequence)
           setTimeout(nextRound,800);
           }else{
-
             dbox("Congratulation!!! You are the WINNER! Click Start to start a new game")
             //Show the message to the winner!!
             level = 0;
@@ -211,7 +217,7 @@ const playerRound = () => {
              nGame=false;
               resetPlayerRound();
               levelPattern([]);
-              btnReStart.removeAttribute("able");
+              btnReStart.setAttribute("disabled", true);
               btnStart.removeAttribute("disabled");
               return;
 
@@ -264,23 +270,14 @@ function dbox (msg) {
 // Function to start the game
 const start = () => {
   // When we are in a game the button will be disabled
-
   disabledButtons();
-  // Start the round
-  setTimeout(nextRound,2000);
-  // Start to listen click button events
-  playerRound();
   if(gameTruth === false){
-    btnStart.setAttribute('disabled', true);
-    btnReStart.setAttribute('able', true);
     // Start the round
     setTimeout(nextRound,2000);
     // Start to listen click button events
     playerRound();
     return;
   }
-    btnStart.setAttribute('disabled', true);
-    btnReStart.setAttribute('able', true);
     setTimeout(nextRound,2000);
   
 };
@@ -296,9 +293,11 @@ btnStart.addEventListener('click', () => {
 
 btnReStart.addEventListener('click', () =>{
   
+  //variable to not let activate the button again
+  reStart = false;
+
   //If I use the reStart one time, I put it disable
   circleAnimation();
-  btnReStart.setAttribute('disabled', true);
 
   // Show game sequence animation
   animationSequence();
@@ -309,6 +308,7 @@ btnReStart.addEventListener('click', () =>{
 //funtion for the toggle button 
 //If you change the state, the play will start again
 toggleHardmode.onchange = function() {
+
   if(toggleHardmode.checked) {
     hardMode = 1;
     newGame();
@@ -329,7 +329,7 @@ const disabledButtons = () =>{
 }
 
 const avaibleButtons = () => {
-  btnReStart.removeAttribute('disabled', true);
+  if(reStart){btnReStart.removeAttribute('disabled', true);}
   red.removeAttribute('disabled',true);
   yellow.removeAttribute('disabled',true);
   green.removeAttribute('disabled',true);
