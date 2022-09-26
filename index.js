@@ -20,6 +20,8 @@ let playerSequence = [];
 // Variable to set the Hard-mode
 let hardMode = 0;
 
+let show = 1;
+
 
 const vibration = [
   { transform: 'translate3d(-3px, 0, 0)' },
@@ -35,16 +37,19 @@ const vibrationTiming = {
 
 // function for button animation
 const squareAnimation = (color) => {
+
   //Give a sound based of the color
   audio[colors.indexOf(color)].play();
   // Variable for select button using the color clicked
   const square = document.querySelector(`.square-${color}`);
   // Add styles to the color button clicked
   square.classList.add('pushed');
+
   // Remove styles after 200 milliseconds for push effect
   setTimeout(() => {
     square.classList.remove('pushed');
   }, 200);
+  
 }; 
 
 //function for give an animation to the container when an error occurs
@@ -73,8 +78,6 @@ const nextColor = () => {
 // Function to generate the game sequence
 const nextSequence = (options = { withNewColor: true }) => {
   //Re-active my reStart button
-  btnReStart.setAttribute('able', true);
-  btnReStart.removeAttribute('disabled');
 
   // if (withNewColor == undefined) withNewColor = true;
   let nextSequence = [];
@@ -99,6 +102,8 @@ const resetPlayerRound = () => {
 // Function to generate next sequence and show animation
 const nextRound = (options = { withNewColor: true }) => {
   // reset variables related to the player
+  btnReStart.removeAttribute('disabled', true);
+
   // it must be used every time the user fails
   resetPlayerRound();
   // Get game sequence
@@ -107,15 +112,17 @@ const nextRound = (options = { withNewColor: true }) => {
   levelPattern(gameSequence);
   // Show game sequence animation
   setTimeout(animationSequence,1000);
-
 };
 //Show animation sequence
 const animationSequence = () => {
+  
   gameSequence.forEach((element, i) => {
     setTimeout(() => {
       squareAnimation(element);
     }, 800 * (i + 1));
   });
+  
+  
 }
 //shows the nummber of steps in the pattern
 const levelPattern = (array) => {
@@ -131,6 +138,8 @@ let playerClicks = 0;
 // Function to show the animation when the color is clicked
 // it calls the function "squareAnimation"
 const playerRound = () => {
+  //activate the buttons
+  
   // Add event to the container to get the color of clicked button
   squareContainer.addEventListener('click', (event) => {
     // Condition to confirm that a square is clicked
@@ -165,8 +174,6 @@ const playerRound = () => {
              playerSequence = [];
              //reStart the match
             //setTimeout(nextRound,800);
-              btnReStart.removeAttribute("able");
-              btnStart.removeAttribute("disabled");
           }
         }
       } else {
@@ -216,8 +223,10 @@ function dbox (msg) {
 // Function to start the game
 const start = () => {
   // When we are in a game the button will be disabled
-  btnStart.setAttribute('disabled', true);
-  btnReStart.setAttribute('able', true);
+  
+  btnReStart.removeAttribute('disabled', true);
+  btnStart.setAttribute("disabled",true);
+
   // Start the round
   setTimeout(nextRound,2000);
   // Start to listen click button events

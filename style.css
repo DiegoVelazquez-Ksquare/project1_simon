@@ -118,14 +118,11 @@ p {
     border-box;
 }
 
-#btn-restart {
+#btn-restart[disabled] {
   display: none;
 }
-#btn-restart[able] {
-  display: unset;
-}
 
-#btn-restart[disabled] {
+#btn-restart{
   display: unset;
   
   border: 5px solid rgba(114, 110, 110, 0.7);
